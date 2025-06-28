@@ -3,6 +3,9 @@ import time
 active = True
 Stock = 100
 Minutes= 0
+history = []
+input = int(input('Do you want a log scale or a normal graph type 1 if log scale type 2 for normal graph'))
+
 while active:
     hours = Minutes // 60
     remaining_minutes = Minutes % 60
@@ -18,20 +21,26 @@ while active:
         active = False
         print(f'It took {years} years {remaining_months} months {round(remaining_days)} days {remaining_hours} hours {remaining_minutes} minutes to be a Millionaire')
         break
-    if round(Stock, 2) < 0.01:
+    elif round(Stock, 2) < 0.01:
         print("You're Bankrupt!")
         active = False
         print(f'It took {years} years {remaining_months} months {round(remaining_days)} days {remaining_hours} hours {remaining_minutes} minutes to be bankrupt')
         break
-    elif x <= 0.5:
-            Stock = Stock+(Stock * 0.0101)
-            Minutes = Minutes+1
-            time.sleep(0)
-            print(round(Stock, 2))
+    change = Stock * (0.0101 if x <= 0.5 else -0.01)
+    Stock += change
+    print(round(Stock,2))
+    if input == 1:
+        history.append(math.log10(Stock))
     else:
-            Stock = Stock-(Stock * 0.01)
-            Minutes = Minutes+1
-            time.sleep(0)
-            print(round(Stock, 2))
+        history.append(Stock)
+    Minutes += 1
+    time.sleep(0)
+plt.plot(history, label='Stock Value', color='green')
+plt.title("Stock Simulation Over Time")
+plt.xlabel("Minutes")
+plt.ylabel("Stock Price")
+plt.grid(True)
+plt.legend()
+plt.show()
 
 
